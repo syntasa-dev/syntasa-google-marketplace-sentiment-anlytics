@@ -1,12 +1,8 @@
-# SYNTASA Customer Intelligence Platform for Google Marketplace
+# SYNTASA Behavioral Sentiment Analytics Platform for Google Marketplace
 
 This repository contains all the information for the SYNTASA Google Marketplace Solution.
 
 ## Installing the SYNTASA microservice stack
-
-Before Beginning, please obtain a license for SYNTASA, for more information please see:
-
-> [SYNTASA licensing information](/docs/SYN_LICENSE_INFO.md)
 
 To install using GOOGLE CLOUD MARKETPLACE, please see: [`MARKETPLACE DEPLOYMENT`](/docs/MARKETPLACE_DEPLOYMENT.md)
 
@@ -26,6 +22,6 @@ To install using MPDEV, please see: [`MPDEV_INSTALLATION`](/docs/MPDEV_INSTALLAT
 
 ---
 
-For questions and comments please reach out to info@syntasa.com
+For questions and comments please reach out to sales@syntasa.com
 
 For technical guidance please reach out to support@syntasa.com or devops@syntasa.com
