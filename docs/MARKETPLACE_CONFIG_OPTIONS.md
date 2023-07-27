@@ -1,91 +1,77 @@
-## SYNTASA Google Cloud Marketplace Configuration Options
+# SYNTASA Google Cloud Marketplace Configuration Options
 
-When configuring the SYNTASA App in Google Marketplace, you will need to enter the below fields.  Please see the descriptions for what each
-field is and why it is required.
+## Common Parameters
 
-*Before beginning, please make sure that your Google Cloud Platform IAM user has the necessary Kubernetes Engine Admin Permissions.  This is required
-to create Kubernetes Service resources.*
+The following parameters are commonly used in the SYNTASA configuration:
+
+**Name**
+
+Specifies the name of the deployment. Example: 'test-deployment'
 
 **Namespace**
 
->Namespace is by default set to the default namespace.  If required, please choose a namespace of your liking, most common
-entries for this field is something like 'syntasa'
+The Kubernetes namespace where SYNTASA is deployed. Example: 'syntasa'
 
-**App Instance Name**
+**Job Service Account Name**
 
-> For this field, please feel free to select any name you wish to use for the deployment.  Default is usually something 
-along the lines of 'syntasa'
+The service account that the job will use to run. Example: 'sma-sa'
 
-**License Key**
+**Image Pull Secrets**
 
-> SYNTASA is a Bring-Your-Own-License solution, therefore you must get a license from SYNTASA before proceeding to continue
-with the installation.  Please see: [`SYN_LICENSE_INFO.md`](/docs/SYN_LICENSE_INFO.md)
+The secret used to pull Docker images. This is often necessary if your Docker images are hosted in a private repository. Example: 'syn-creds'
 
-**Secret Key**
+**Image Repo**
 
-> SYNTASA uses a secret key in conjunction with the license key to provide database encryption mechanisms.  Please see the
-following document for more information.  [`SYN_LICENSE_INFO.md`](/docs/SYN_LICENSE_INFO.md)
+Specifies the Docker repository where SYNTASA's images are stored. Example: 'syntasadevelopment'
 
-**IP Address of Reserved External IP**
+**Installer Version**
 
-> If you wish to use your own External IP Address, please provide the IP address here (such as a GKE reserved external static IP), for
-more information about how to setup a external IP, please see the documentation located here: [`Prerequisites - External Static IP Reservation`](https://github.com/syntasa-dev/syntasa-google-marketplace/blob/master/docs/PREREQUISITES.md#external-static-ip-reservation-optional)
+The version of SYNTASA to be deployed. Example: '7.1.2'
 
-**Source IP Address Filter**
+**Project**
 
-> This field denotes what IP addresses the SYNTASA Application UI will be open to.  The default value is 0.0.0.0/0 which means
-it will be open to the entire world.  This is not recommended.  Please find the IP address to either your office or wherever
-you wish to access the application from to limit exposure.  This field takes CIDR Notation IP Address values in a comma separated
-list, e.g. 10.10.0.1/32,10.10.1.1/32.
+Specifies the Google Cloud Project where the deployment will occur. Example: 'syntasa-dev'
 
-**External Metastore Connection Name**
+**Pull From Dockerhub**
 
-> SYNTASA uses an External Cloud SQL metastore to store state information about the platform.  It is recommended to have this
-in an external Cloud SQL instance as documented in the prerequisite documentation located here: [`Prerequisites - External Metastore`](https://github.com/syntasa-dev/syntasa-google-marketplace/blob/master/docs/PREREQUISITES.md#external-metastore)
+A boolean flag that determines whether or not to pull Docker images from Docker Hub. If set to true, images will be pulled from Docker Hub. If false, images will be pulled from the image repository specified by 'imageRepo'. Example: true
 
-**External Metastore Connection Username**
+**HAProxy Service Account Name**
 
-> The username to use to connect to the external metastore listed previously.  For Postgres databases, this user is usually 'postgres'
+The service account that the HAProxy service will use to run. Example: 'sma-sa'
 
-**External Metastore Password**
+**HAProxy Service Load Balancer IP**
 
-> The password you chose when creating your external metastore above.
+Specifies the IP address that the HAProxy service will use. If left empty, an IP address will be automatically assigned.
 
-**GCP IAM Role for Infrastructure Services**
+**HAProxy Service Load Balancer Source Ranges**
 
-> SYNTASA requires a GCP IAM role to be present when creating the Application.  This IAM role will need to be created
-ahead of time in the GCP IAM Console.  Please see the prerequisites document for more information: [`Prerequisites - Google Cloud Service Account`](https://github.com/syntasa-dev/syntasa-google-marketplace/blob/master/docs/PREREQUISITES.md#google-cloud-service-account)
+Specifies the IP address ranges that are allowed to connect to the HAProxy service.
 
-**Syntasa Service Account Agent**
+**Secrets Cert Name**
 
-> In order to be able to install all the necessary cluster permissions, a Service account will need to be created to 
-allow the SYNTASA deployer platform to install all the necessary Kubernetes Cluster services.  Please allow the app to create
-a new Kubernetes Service Account
+The name of the secret that contains the certificates used for SSL/TLS. Example: 'sma-certs'
 
-**Storage Class**
+**Management Ingress TLS Host**
 
-> This is the persistent volume where the SYNTASA app will store some application metadata.  Please allow the app to create
-a new storage class.
+The host name for the Management Ingress TLS.
 
-**Storage size for persistent volumes**
+**Management Ingress TLS Secret Name**
 
-> Each container within the Kubernetes cluster (for SYNTASA) requires a volume to use for frontend/backend/platform services,
-The default size of 20Gi is usually sufficient.
+The name of the secret that contains the certificates used for SSL/TLS in the management ingress. Example: 'sma-certs'
 
+Please include these parameters in the YAML configuration when deploying the SYNTASA app.
 
-## Accessing the SYNTASA Application UI
+## Accessing the SYNTASA Management Console UI
 
-Once you hit the "Deploy button" in the Google Marketplace SYNTASA Application, please allow a few minutes for all services
-to be deployed and ready.  To access the SYNTASA Application UI, please follow the below guidance:
+Once you hit the "Deploy button" in the Google Marketplace SYNTASA Management Console, please allow a few minutes for all services to be deployed and ready.  To access the SYNTASA Management Console UI, please follow the below guidance:
 
 1. If you specified a static IP in the 'IP Address of Reserved External IP' field, then your application URL link will be as follows:
-> https://<your_static_ip>
-
-2. If you allowed the default empty value to remain, then the SYNTASA application will choose an ephemeral IP to use and your URL link will need to be 
-gathered by:
-> 1. Navigate to the Services & Ingresses page
-> 2. Locate the 'syntasa-ingress' load balancer 
-> 3. Copy the IP address and navigate to it in a new browser tab.
-> 4. Your IP will be in the format https://<some_ephemeral_ip>
+    - https://<your_static_ip>/management
+2. If you allowed the default empty value to remain, then the SYNTASA application will choose an ephemeral IP to use and your URL link will need to be gathered by:
+    - Navigate to the Services & Ingresses page
+    - Locate the 'syntasa-ingress' load balancer 
+    - Copy the IP address and navigate to it in a new browser tab.
+    - Your IP will be in the format https://<some_ephemeral_ip>/management
 
 For any further questions or help, please contact `info@syntasa.com` or `help@syntasa.com`
