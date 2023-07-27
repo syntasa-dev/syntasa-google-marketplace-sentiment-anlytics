@@ -1,0 +1,140 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.management.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    run: {{ .Values.management.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: {{ .Values.management.name }}
+  template:
+    metadata:
+      labels:
+        run: {{ .Values.management.name }}
+    spec:
+      serviceAccountName: {{ .Values.roles.serviceAccount }}
+      automountServiceAccountToken: true
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets.name }}
+{{/*      nodeSelector:*/}}
+{{/*        syn-system-scalable: "owned"*/}}
+      containers:
+        - name: "syntasa-management-console"
+          image: "{{ .Values.imageRepo }}/syntasa-management-console:{{ .Values.installerVersion }}"
+          imagePullPolicy: {{ if .Values.pullFromDockerhub }}Always{{ else }}Never{{ end }}
+          ports:
+            - name: "ui-port"
+              containerPort: 10080
+        - name: "syntasa-management"
+          image: "{{ .Values.imageRepo }}/syntasa-management:{{ .Values.installerVersion }}"
+          imagePullPolicy: {{ if .Values.pullFromDockerhub }}Always{{ else }}Never{{ end }}
+          ports:
+            - name: "mgmt-port"
+              containerPort: 10090
+          env:
+            - name: "SYNTASA_HOSTNAME"
+              value: "{{ .Values.management.ingress.tls.host }}"
+            - name: "SYNTASA_NAMESPACE"
+              value: "{{ .Values.namespace }}"
+        - name: "syntasa-management-auth"
+          image: "{{ .Values.imageRepo }}/syntasa-management-auth:{{ .Values.installerVersion }}"
+          imagePullPolicy: {{ if .Values.pullFromDockerhub }}Always{{ else }}Never{{ end }}
+          ports:
+            - name: "mgmt-auth-port"
+              containerPort: 10100
+          env:
+            - name: "SYNTASA_HOSTNAME"
+              value: "{{ .Values.management.ingress.tls.host }}"
+            - name: "SYNTASA_NAMESPACE"
+              value: "{{ .Values.namespace }}"
+        - name: ubbagent
+          image: gcr.io/cloud-marketplace-tools/metering/ubbagent:latest
+          env:
+            - name: AGENT_CONFIG_FILE
+              value: "/etc/ubbagent/config.yaml"
+            - name: AGENT_LOCAL_PORT
+              value: "4567"
+            - name: AGENT_ENCODED_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.reportingSecret }}
+                  key: reporting-key
+            - name: AGENT_CONSUMER_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.reportingSecret }}
+                  key: consumer-id
+          volumeMounts:
+            - name: ubbagent-config
+              mountPath: /etc/ubbagent
+      volumes:
+        - name: ubbagent-config
+          configMap:
+            name: ubbagent-config
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.management.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    run: {{ .Values.management.name }}
+spec:
+  selector:
+    run: {{ .Values.management.name }}
+  ports:
+    - name: ui-port
+      port: 10080
+    - name: mgmt-port
+      port: 10090
+    - name: mgmt-auth-port
+      port: 10100
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.management.ingress.name }}
+  namespace: {{ .Values.namespace }}
+  annotations:
+    kubernetes.io/ingress.class: "haproxy"
+  labels:
+    run: {{ .Values.management.name }}
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /management
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.management.name }}
+                port:
+                  number: 10080
+          - path: /syntasa-management
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.management.name }}
+                port:
+                  number: 10090
+          - path: /syntasa-management/auth
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.management.name }}
+                port:
+                  number: 10100
+{{- if .Values.management.ingress.tls.host }}
+      host: {{ .Values.management.ingress.tls.host }}
+{{- end }}
+  tls:
+    - secretName: {{ .Values.management.ingress.tls.secretName }}
+      hosts:
+      {{- if .Values.management.ingress.tls.host }}
+        - {{ .Values.management.ingress.tls.host }}
+      {{- end }}

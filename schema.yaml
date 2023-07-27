@@ -1,10 +1,10 @@
 x-google-marketplace:
   schemaVersion: v2
   applicationApiVersion: v1beta1
-  publishedVersion: '5.1.0'
+  publishedVersion: '7.1.2'
   publishedVersionMetadata:
     releaseNote: >-
-      Syntasa platform release 5.1.0
+      Syntasa platform release 7.1.2
     releaseTypes:
       - Feature
     recommended: true
@@ -21,6 +21,11 @@ x-google-marketplace:
 
   images:
     '': {}
+    ubbagent:
+      properties:
+        ubbagentImage:
+          type: FULL
+          value: gcr.io/cloud-marketplace-tools/metering/ubbagent:latest
     syntasa-generic-processor:
       properties:
         containerImage:
@@ -166,109 +171,111 @@ form:
       <p>For any additional support please visit: <a href="https://help.syntasa.com">help.syntasa.com</a></p>
 
 properties:
-  name:
+  name: 
     type: string
-    default: "syntasa"
     x-google-marketplace:
       type: NAME
-
-  namespace:
+  namespace: 
     type: string
-    default: "default"
     x-google-marketplace:
       type: NAMESPACE
-
-  syn_license:
+  reportingSecret:
     type: string
-    title: License key.  Please see documentation (Required)
-    default: ""
     x-google-marketplace:
-      type: STRING
-
-  syn_secret_key:
+      type: REPORTING_SECRET
+  job.name:
     type: string
-    title: Secret Key.  Please see documentation (Required)
+    default: "syntasa-package"
+  job.ttlSecondsAfterFinished:
+    type: integer
+    default: 300
+  job.activeDeadlineSeconds:
+    type: integer
+    default: 300
+  job.serviceAccountName:
+    type: string
+  imagePullSecrets.name:
+    type: string
+  imageRepo:
+    type: string
+  installerVersion:
+    type: string
+  project:
+    type: string
+    default: "some-project"
+  pullFromDockerhub:
+    type: boolean
+    default: true
+  haproxy.name:
+    type: string
+    default: "syntasa-ingress"
+  haproxy.serviceAccountName:
+    type: string
+  haproxy.service.loadBalancerIP:
     default: ""
-    x-google-marketplace:
-      type: MASKED_FIELD
-
-  static_ip_address:
     type: string
-    title: IP Address of Reserved External IP (Optional)
-    default: ""
-    x-google-marketplace:
-      type: STRING
-
-  whitelist_ips:
-    type: string
-    title: Source IP Address filter
-    description: Comma separated list of IP Addresses to whitelist.
+  haproxy.service.loadBalancerSourceRanges:
     default: "0.0.0.0/0"
-
-  metastore_connection_name:
     type: string
-    title: External Metastore Connection Name (Required)
+  configMap.name:
+    type: string
+    default: "syntasa-ingress-conf"
+  secrets.docker.server:
+    type: string
+    default: "https://index.docker.io/v1/"
+  secrets.docker.username:
+    type: string
+  secrets.docker.password:
+    type: string
+  secrets.cert.name:
+    type: string
+    default: "sma-certs"
+  management.name:
+    type: string
+    default: "syntasa-management-console"
+  management.ingress.name:
+    type: string
+    default: "syntasa-management-console"
+  management.ingress.tls.host:
+    type: string
     default: ""
-    x-google-marketplace:
-      type: STRING
-
-  metastore_connection_user:
+  management.ingress.tls.secretName:
     type: string
-    title: External Metastore Username (Required)
-    default: ""
-    x-google-marketplace:
-      type: STRING
-
-  metastore_connection_password:
+    default: "sma-certs"
+  roles.serviceAccount:
     type: string
-    title: External Metastore Password (Required)
-    default: ""
-    x-google-marketplace:
-      type: MASKED_FIELD
-
-  infrastructure_service_account:
-    type: string
-    title: GCP IAM Role for Infrastructure Services (Required)
-    default: ""
-    x-google-marketplace:
-      type: STRING
-
-  syn_kube_service_account:
-    type: string
-    title: Syntasa Service Account Agent
+    title: Syntasa Service Account
     x-google-marketplace:
       type: SERVICE_ACCOUNT
       serviceAccount:
+        description: >
+          This service account is used to deploy the resources for the syntasa application including
+          secrets, configmaps, ingresses, deployments, services, endpoints, nodes, pods, persistentvolumes, and monitor logs.
         roles:
           - type: ClusterRole
             rulesType: CUSTOM
             rules:
-              - apiGroups: [""]
-                resources: ["secrets", "configmaps", "services", "endpoints", "nodes", "pods", "persistentvolumes", "pods/log"]
-                verbs: ["*"]
-              - apiGroups: [""]
-                resources: ["events"]
-                verbs: ["*"]
-              - apiGroups: ["extensions", "apps"]
-                resources: ["ingresses", "ingresses/status", "deployments"]
-                verbs: ["*"]
-
-  syn_kube_storage_class:
-    type: string
-    title: Storage Class
-    default: "pd-standard"
-    description: You can choose an existing storageclass or a newly created Storage Class will be provisioned with "pd-ssd"
-    x-google-marketplace:
-      type: STORAGE_CLASS
-      storageClass:
-        type: SSD
-
-  syn_kube_storage_class_size:
-    type: string
-    title: Storage size for persistent volumes
-    description: Storage Volume size for frontend/backend/platform services
-    default: "20Gi"
-    pattern: '^[1-9][0-9]*(\.[0-9]+)?[TGM]i?$'
+              - apiGroups: [ "", "apps" ]
+                resources: [ "configmaps", "endpoints", "nodes", "pods", "services", "namespaces", "events", "serviceaccounts", "persistentvolumes", "persistentvolumeclaims", "secrets", "pods/log" ]
+                verbs: [ "*" ]
+              - apiGroups: [ "extensions", "apps", "networking.k8s.io" ]
+                resources: [ "ingresses", "ingresses/status", "deployments", "ingressclasses" ]
+                verbs: [ "*" ]
+              - apiGroups: [ "apiextensions.k8s.io" ]
+                resources: [ "customresourcedefinitions" ]
+                verbs: [ "*" ]
+              - apiGroups: [ "sparkoperator.k8s.io" ]
+                resources: [ "*" ]
+                verbs: [ "*" ]
+              - apiGroups: [ "batch" ]
+                resources: [ "*" ]
+                verbs: [ "*" ]
+              - apiGroups: [ "rbac.authorization.k8s.io" ]
+                resources: [ "rolebindings", "roles" ]
+                verbs: [ "*" ]
+              - apiGroups: [ "v1" ]
+                resources: [ "serviceaccounts" ]
+                verbs: [ "*" ]
 
   certificate:
     type: string
@@ -278,15 +285,8 @@ properties:
         generatedProperties:
           base64EncodedPrivateKey: TLS_CERTIFICATE_KEY
           base64EncodedCertificate: TLS_CERTIFICATE_CRT
-
 required:
   - name
   - namespace
-  - syn_license
-  - syn_secret_key
-  - whitelist_ips
-  - metastore_connection_name
-  - metastore_connection_user
-  - metastore_connection_password
-  - infrastructure_service_account
+  - project
   - certificate
