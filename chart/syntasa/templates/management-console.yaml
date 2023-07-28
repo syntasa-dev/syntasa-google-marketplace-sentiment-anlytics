@@ -34,7 +34,7 @@ spec:
               containerPort: 10090
           env:
             - name: "SYNTASA_HOSTNAME"
-              value: "{{ .Values.management.ingress.tls.host }}"
+              value: "{{ .Values.haproxy.service.loadBalancerHostname }}"
             - name: "SYNTASA_NAMESPACE"
               value: "{{ .Values.namespace }}"
         - name: "{{ .Values.management.container_metadata.management_auth_name }}"
@@ -45,7 +45,7 @@ spec:
               containerPort: 10100
           env:
             - name: "SYNTASA_HOSTNAME"
-              value: "{{ .Values.management.ingress.tls.host }}"
+              value: "{{ .Values.haproxy.service.loadBalancerHostname }}"
             - name: "SYNTASA_NAMESPACE"
               value: "{{ .Values.namespace }}"
         - name: ubbagent
@@ -127,12 +127,12 @@ spec:
                 name: {{ .Values.management.container_metadata.management_name }}
                 port:
                   number: 10100
-{{- if .Values.management.ingress.tls.host }}
-      host: {{ .Values.management.ingress.tls.host }}
+{{- if .Values.haproxy.service.loadBalancerHostname }}
+      host: {{ .Values.haproxy.service.loadBalancerHostname }}
 {{- end }}
   tls:
     - secretName: {{ .Values.management.ingress.tls.secretName }}
       hosts:
-      {{- if .Values.management.ingress.tls.host }}
-        - {{ .Values.management.ingress.tls.host }}
+      {{- if .Values.haproxy.service.loadBalancerHostname }}
+        - {{ .Values.haproxy.service.loadBalancerHostname }}
       {{- end }}
