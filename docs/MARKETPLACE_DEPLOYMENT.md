@@ -67,38 +67,6 @@ In order to ensure the Kubernetes cluster we create has the correct permissions,
    `syntasa-application-serviceacc@<my_project>.iam.gserviceaccount.com`
 
 ---
-   
-### Create an External Cloud SQL
-
-SYNTASA uses an external Cloud SQL to save metadata and state information, please create one using the steps below.
-
-1. Click the hamburger icon on the left and navigate to the 'SQL' tab
-2. Click on 'Create Instance' on the top menu bar
-3. On the next screen, pick a Database Type, please pick 'Choose PostgreSQL'
-4. Fill in the following fields
-
-| Field Name            | Field Value                                                                                                                                                                                                   |
-|:-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Instance Id           | A name for the Instance e.g. 'syntasa-metadata-db'                                                                                                                                                            |
-| Default User Password | Pick a password that is sufficiently complex. **TAKE NOTE: 'database password' you will need this later when deploying the application from the Marketplace**                                                                                                                                              |
-| Location              | Pick a Region and Zone for your instance to be hosted in.<br/>  **Please note that it is very important to pick a region and zone that will be the same region as the Kubernetes cluster you will create later.** |
-| Database Version      | Please pick PostgreSQL 9.6                                                                                                                                                                                    |
-
-5. Once filled out, please click the 'show configuration options' link on the bottom of the page
-6. After the new sub-menu opens up, click the 'Flags' section to open that section up.
-7. Click 'Add Item'
-8. Click the 'Choose one' drop-down box
-9. Search for a flag named 'max_connections'
-10. Once selected, please enter a value of 100 in the max_connections field.
-11. Click 'Close'
-12. Click the 'Create' button at the bottom.
-13. Once your Metastore has finished creating (this might take anywhere from 2-10 minutes) **TAKE NOTE: 'Instance Connection Name' you will need this later when deploying the application from the Marketplace** which should look like the following:
-  
-    `<my_project>:<my_region>:syntasa-metastore-pg`
-    
-14. Click on the created instance, go to Databases, create new database and name it as 'syntasa'.
-
----
 
 ### Reserve a Static External IP
 
