@@ -78,40 +78,27 @@ When running the MPDEV installation, the following properties must be set
 {
     "name": "test-deployment",
     "namespace": "syntasa",
-    "job.serviceAccountName": "sma-sa",
-    "imagePullSecrets.name": "syn-creds",
-    "imageRepo": "syntasadevelopment",
-    "installerVersion": "7.1.2",
-    "project": "syntasa-dev",
-    "pullFromDockerhub": true,
-    "haproxy.serviceAccountName": "sma-sa",
-    "haproxy.service.loadBalancerIP": "",
-    "haproxy.service.loadBalancerSourceRanges": "",
-    "secrets.certName": "sma-certs",
-    "management.ingress.tls.host": "",
-    "management.ingress.tls.secretName": "sma-certs"
+    "reportingSecret": "gs://cloud-marketplace-tools/reporting_secrets/fake_reporting_secret.yaml",
+    "gcpServiceAccount": "syntasa-marketplace-dev@syntasa-dev.iam.gserviceaccount.com",
+    "haproxy.service.loadBalancerHostname": "",
+    "haproxy.service.loadBalancerIP": "35.245.96.107",
+    "haproxy.service.loadBalancerSourceRanges": "0.0.0.0/0"
 }
 ```
 
 ### Running the MPDEV Installation
 To run the Install type:
 ```
- mpdev install --deployer=$REGISTRY/$APP_NAME/deployer:$DEPLOYER_TAG --parameters='{
+mpdev install --deployer=gcr.io/syntasa-public/syntasa-behaviorial-sentiment-analytics/deployer:7.1.2 --parameters='{
     "name": "test-deployment",
     "namespace": "syntasa",
-    "job.serviceAccountName": "sma-sa",
-    "imagePullSecrets.name": "syn-creds",
-    "imageRepo": "syntasadevelopment",
-    "installerVersion": "7.1.2",
-    "project": "syntasa-dev",
-    "pullFromDockerhub": true,
-    "haproxy.serviceAccountName": "sma-sa",
-    "haproxy.service.loadBalancerIP": "",
-    "haproxy.service.loadBalancerSourceRanges": "",
-    "secrets.certName": "sma-certs",
-    "management.ingress.tls.host": "",
-    "management.ingress.tls.secretName": "sma-certs"
-}'```
+    "reportingSecret": "gs://cloud-marketplace-tools/reporting_secrets/fake_reporting_secret.yaml",
+    "gcpServiceAccount": "syntasa-marketplace-dev@syntasa-dev.iam.gserviceaccount.com",
+    "haproxy.service.loadBalancerHostname": "",
+    "haproxy.service.loadBalancerIP": "35.245.96.107",
+    "haproxy.service.loadBalancerSourceRanges": "0.0.0.0/0"
+}'
+```
 
 
 ### Deploying your changes

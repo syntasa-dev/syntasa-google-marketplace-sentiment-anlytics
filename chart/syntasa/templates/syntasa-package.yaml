@@ -18,11 +18,9 @@ spec:
       restartPolicy: "OnFailure"
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets.name }}
-{{/*      nodeSelector:*/}}
-{{/*        syn-system-scalable: "owned"*/}}
       containers:
       - name: {{ .Values.job.name }}
-        image: "{{ .Values.imageRepo }}/syntasa-package:{{ .Values.installerVersion }}"
+        image: "{{ .Values.syntasaPackageImage }}"
         imagePullPolicy: "Always"
         env:
         - name: SYNTASA_HOSTNAME
@@ -30,6 +28,6 @@ spec:
         - name: SYNTASA_PULL_POLICY
           value: "Always"
         - name: GCP_PROJECT_NAME
-          value: "{{ .Values.project }}"
+          value: {{ .Values.project }}
         - name: IMAGE_REPO
           value: "{{ .Values.imageRepo }}"

@@ -1,17 +1,26 @@
-name: app-name
+name: "syntasa-application"
 namespace: default
+project: "syntasa-dev"
 gcpServiceAccount: ""
 reportingSecret: ""
+publishedVersion: "7.1.2"
+
+imageRepo: ""
+ubbAgentImage: "gcr.io/cloud-marketplace-tools/metering/ubbagent:latest"
+haproxyIngressImage: ""
+syntasaInstallerAgentImage: ""
+syntasaManagementImage: ""
+syntasaManagementAuthImage: ""
+syntasaManagementConsoleImage: ""
+syntasaPackageImage: ""
+
 job:
   name: syntasa-package
   ttlSecondsAfterFinished: 300
   activeDeadlineSeconds: 300
+
 imagePullSecrets:
   name: syn-creds
-imageRepo: 'gcr.io/syntasa-public/syntasa-behaviorial-sentiment-analytics'
-installerVersion: '7.1.2'
-project: your-project
-pullFromDockerhub: true
 
 haproxy:
   name: syntasa-ingress
@@ -28,7 +37,8 @@ haproxy:
     targetPort: 443
     type: LoadBalancer
     loadBalancerIP: ""
-    loadBalancerSourceRanges: '0.0.0.0/0'
+    loadBalancerSourceRanges: "0.0.0.0/0"
+    loadBalancerHostname: ""
 
 secrets:
   cert:
@@ -39,7 +49,10 @@ secrets:
     password: your-docker-password
 
 management:
-  name: syntasa-management-console
+  container_metadata:
+    management_name: syntasa-management
+    management_console_name: syntasa-management-console
+    management_auth_name: syntasa-management-auth
   ingress:
     name: syntasa-management-console
     tls:
@@ -47,9 +60,9 @@ management:
       host: ""
 
 roles:
-  serviceAccount: 'sma-sa'
+  serviceAccount: "sma-sa"
 
-deployerServiceAccount: 'deployer-sa'
+deployerServiceAccount: "deployer-sa"
 
 TLS_CERTIFICATE_CRT: eW91ci1jZXJ0aWZpY2F0ZQo=
 TLS_CERTIFICATE_KEY: eW91ci1rZXkK

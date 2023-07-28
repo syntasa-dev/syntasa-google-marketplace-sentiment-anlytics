@@ -75,8 +75,8 @@ spec:
       type: ServiceRef
       serviceRef:
         name: syntasa-ingress
-        port: 443
-        path: /
+        protocol: HTTPS
+        path: /management
   componentKinds:
     - group: v1
       kind: Service

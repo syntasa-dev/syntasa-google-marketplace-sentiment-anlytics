@@ -1,5 +1,3 @@
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,11 +19,9 @@ spec:
       automountServiceAccountToken: true
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets.name }}
-{{/*      nodeSelector:*/}}
-{{/*        syn-system-scalable: "owned"*/}}
       containers:
         - name: {{ .Values.haproxy.name }}
-          image: "{{ .Values.imageRepo }}/haproxy-ingress:{{ .Values.installerVersion }}"
+          image: "{{ .Values.haproxyIngressImage }}"
           imagePullPolicy: "Always"
           args:
             - --configmap={{ .Values.namespace }}/syntasa-ingress-conf

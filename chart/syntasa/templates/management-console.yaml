@@ -1,36 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.management.name }}
+  name: {{ .Values.management.container_metadata.management_name }}
   namespace: {{ .Values.namespace }}
   labels:
-    run: {{ .Values.management.name }}
+    run: {{ .Values.management.container_metadata.management_name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: {{ .Values.management.name }}
+      run: {{ .Values.management.container_metadata.management_name }}
   template:
     metadata:
       labels:
-        run: {{ .Values.management.name }}
+        run: {{ .Values.management.container_metadata.management_name }}
     spec:
       serviceAccountName: {{ .Values.roles.serviceAccount }}
       automountServiceAccountToken: true
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets.name }}
-{{/*      nodeSelector:*/}}
-{{/*        syn-system-scalable: "owned"*/}}
       containers:
-        - name: "syntasa-management-console"
-          image: "{{ .Values.imageRepo }}/syntasa-management-console:{{ .Values.installerVersion }}"
-          imagePullPolicy: {{ if .Values.pullFromDockerhub }}Always{{ else }}Never{{ end }}
+        - name: "{{ .Values.management.container_metadata.management_console_name }}"
+          image: "{{ .Values.syntasaManagementConsoleImage }}"
+          imagePullPolicy: "Always"
           ports:
             - name: "ui-port"
               containerPort: 10080
-        - name: "syntasa-management"
-          image: "{{ .Values.imageRepo }}/syntasa-management:{{ .Values.installerVersion }}"
-          imagePullPolicy: {{ if .Values.pullFromDockerhub }}Always{{ else }}Never{{ end }}
+        - name: "{{ .Values.management.container_metadata.management_name }}"
+          image: "{{ .Values.syntasaManagementImage }}"
+          imagePullPolicy: "Always"
           ports:
             - name: "mgmt-port"
               containerPort: 10090
@@ -39,9 +37,9 @@ spec:
               value: "{{ .Values.management.ingress.tls.host }}"
             - name: "SYNTASA_NAMESPACE"
               value: "{{ .Values.namespace }}"
-        - name: "syntasa-management-auth"
-          image: "{{ .Values.imageRepo }}/syntasa-management-auth:{{ .Values.installerVersion }}"
-          imagePullPolicy: {{ if .Values.pullFromDockerhub }}Always{{ else }}Never{{ end }}
+        - name: "{{ .Values.management.container_metadata.management_auth_name }}"
+          image: "{{ .Values.syntasaManagementAuthImage }}"
+          imagePullPolicy: "Always"
           ports:
             - name: "mgmt-auth-port"
               containerPort: 10100
@@ -51,7 +49,7 @@ spec:
             - name: "SYNTASA_NAMESPACE"
               value: "{{ .Values.namespace }}"
         - name: ubbagent
-          image: gcr.io/cloud-marketplace-tools/metering/ubbagent:latest
+          image: "{{ .Values.ubbAgentImage }}"
           env:
             - name: AGENT_CONFIG_FILE
               value: "/etc/ubbagent/config.yaml"
@@ -79,13 +77,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.management.name }}
+  name: {{ .Values.management.container_metadata.management_name }}
   namespace: {{ .Values.namespace }}
   labels:
-    run: {{ .Values.management.name }}
+    run: {{ .Values.management.container_metadata.management_name }}
 spec:
   selector:
-    run: {{ .Values.management.name }}
+    run: {{ .Values.management.container_metadata.management_name }}
   ports:
     - name: ui-port
       port: 10080
@@ -103,7 +101,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "haproxy"
   labels:
-    run: {{ .Values.management.name }}
+    run: {{ .Values.management.container_metadata.management_name }}
 spec:
   rules:
     - http:
@@ -112,21 +110,21 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.management.name }}
+                name: {{ .Values.management.container_metadata.management_name }}
                 port:
                   number: 10080
           - path: /syntasa-management
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.management.name }}
+                name: {{ .Values.management.container_metadata.management_name }}
                 port:
                   number: 10090
           - path: /syntasa-management/auth
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.management.name }}
+                name: {{ .Values.management.container_metadata.management_name }}
                 port:
                   number: 10100
 {{- if .Values.management.ingress.tls.host }}

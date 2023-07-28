@@ -1,10 +1,10 @@
 x-google-marketplace:
   schemaVersion: v2
   applicationApiVersion: v1beta1
-  publishedVersion: '7.1.2'
+  publishedVersion: "7.1.2"
   publishedVersionMetadata:
     releaseNote: >-
-      Syntasa platform release 7.1.2
+      SYNTASA platform release 7.1.2
     releaseTypes:
       - Feature
     recommended: true
@@ -20,145 +20,45 @@ x-google-marketplace:
           memory: 16384Mi
 
   images:
-    '': {}
+    '':
+      properties:
+        imageRepo:
+          type: REPO_WITH_REGISTRY
     ubbagent:
+      type: string
+      default: gcr.io/cloud-marketplace-tools/metering/ubbagent:latest
       properties:
         ubbagentImage:
           type: FULL
-          value: gcr.io/cloud-marketplace-tools/metering/ubbagent:latest
-    syntasa-generic-processor:
-      properties:
-        containerImage:
-          type: FULL
-
-    kafka:
-      properties:
-        kafkaImage:
-          type: FULL
-
-    zookeeper:
-      properties:
-        zookeeperImage:
-          type: FULL
-
     haproxy-ingress:
       properties:
-        ingressImage:
+        haproxyIngressImage:
           type: FULL
-
-    defaultbackend:
+    syntasa-installer-agent:
       properties:
-        defaultBackendImage:
+        syntasaInstallerAgentImage:
           type: FULL
-
-    cloudsql-proxy:
+    syntasa-management:
       properties:
-        sqlProxyImage:
+        syntasaManagementImage:
           type: FULL
-
-    syntasa-infrastructure-service:
+    syntasa-management-auth:
       properties:
-        syntasaInfrastructureServiceImage:
+        syntasaManagementAuthImage:
           type: FULL
-
-    syntasa-api-service:
+    syntasa-management-console:
       properties:
-        syntasaApiServiceImage:
+        syntasaManagementConsoleImage:
           type: FULL
-
-    syntasa-auth-service:
+    syntasa-package:
       properties:
-        syntasaAuthServiceImage:
-          type: FULL
-
-    syntasa-composer-service:
-      properties:
-        syntasaComposerServiceImage:
-          type: FULL
-
-    syntasa-mlflow:
-      properties:
-        syntasaMlflowServiceImage:
-          type: FULL
-
-    syntasa-data-gateway-service:
-      properties:
-        syntasaDataGatewayServiceImage:
-          type: FULL
-
-    syntasa-event-engine-service:
-      properties:
-        syntasaEventEngineServiceImage:
-          type: FULL
-
-    syntasa-execution-service:
-      properties:
-        syntasaExecutionServiceImage:
-          type: FULL
-
-    syntasa-job-scheduler-service:
-      properties:
-        syntasaJobSchedulerServiceImage:
-          type: FULL
-
-    syntasa-notification-service:
-      properties:
-        syntasaNotificationServiceImage:
-          type: FULL
-
-    syntasa-runtime-service:
-      properties:
-        syntasaRuntimeServiceImage:
-          type: FULL
-
-    syntasa-alert-service:
-      properties:
-        syntasaAlertServiceImage:
-          type: FULL
-
-    syntasa-state-service:
-      properties:
-        syntasaStateServiceImage:
-          type: FULL
-
-    syntasa-app-preview:
-      properties:
-        syntasaAppPreviewImage:
-          type: FULL
-
-    syntasa-app-configuration-service:
-      properties:
-        syntasaAppConfigurationImage:
-          type: FULL
-
-    syntasa-app-platform:
-      properties:
-        syntasaAppPlatformImage:
-          type: FULL
-
-    syntasa-app-business:
-      properties:
-        syntasaAppBusinessImage:
-          type: FULL
-
-    syntasa-app-appdatagateway:
-      properties:
-        syntasaAppAppdatagatewayImage:
-          type: FULL
-
-    syntasa-app-apigateway:
-      properties:
-        syntasaAppApigatewayImage:
+        syntasaPackageImage:
           type: FULL
 
 form:
   - widget: help
     description: |-
       <h2>Thank you for your interest in SYNTASA</h2>
-
-      <p>Before deploying the SYNTASA application from Google Marketplace, you must request a <a href="https://syntasa.com/form/gcp-marketplace-license-request">Syntasa license key</a> for a free trial.</p>
-      <p><b>**This must be done prior to installing SYNTASA in the GCP Marketplace**</b></p>
-      <p>Once requested, SYNTASA representatives will respond with a license key that you can use to deploy along with more detailed instructions</p>
 
       <p>For more information about the SYNTASA Google Marketplace Configuration Parameters on the left, please visit the following guide:</p>
 
@@ -175,7 +75,7 @@ properties:
     type: string
     x-google-marketplace:
       type: NAME
-  namespace: 
+  namespace:
     type: string
     x-google-marketplace:
       type: NAMESPACE
@@ -183,65 +83,29 @@ properties:
     type: string
     x-google-marketplace:
       type: REPORTING_SECRET
-  job.name:
+  gcpServiceAccount:
     type: string
-    default: "syntasa-package"
-  job.ttlSecondsAfterFinished:
-    type: integer
-    default: 300
-  job.activeDeadlineSeconds:
-    type: integer
-    default: 300
-  job.serviceAccountName:
+    title: IAM Service Account to use when deploying SYNTASA resources
+    default: ""
+    x-google-marketplace:
+      type: STRING
+  haproxy.service.loadBalancerHostname:
     type: string
-  imagePullSecrets.name:
-    type: string
-  imageRepo:
-    type: string
-  installerVersion:
-    type: string
-  project:
-    type: string
-    default: "some-project"
-  pullFromDockerhub:
-    type: boolean
-    default: true
-  haproxy.name:
-    type: string
-    default: "syntasa-ingress"
-  haproxy.serviceAccountName:
-    type: string
+    default: ""
+    title: Hostname mapping to use for your load balancer
+    x-google-maretplace:
+      type: STRING
   haproxy.service.loadBalancerIP:
-    default: ""
     type: string
+    title: Static ip to use for your load balancer (this must be reserved beforehand, please see docs)
+    x-google-marketplace:
+      type: STRING
   haproxy.service.loadBalancerSourceRanges:
+    type: string
     default: "0.0.0.0/0"
-    type: string
-  configMap.name:
-    type: string
-    default: "syntasa-ingress-conf"
-  secrets.docker.server:
-    type: string
-    default: "https://index.docker.io/v1/"
-  secrets.docker.username:
-    type: string
-  secrets.docker.password:
-    type: string
-  secrets.cert.name:
-    type: string
-    default: "sma-certs"
-  management.name:
-    type: string
-    default: "syntasa-management-console"
-  management.ingress.name:
-    type: string
-    default: "syntasa-management-console"
-  management.ingress.tls.host:
-    type: string
-    default: ""
-  management.ingress.tls.secretName:
-    type: string
-    default: "sma-certs"
+    title: Comma separated list of IP addresses to whitelist in CIDR Notation e.g. 0.0.0.0/0,1.2.3.7/24
+    x-google-marketplace:
+      type: STRING
   roles.serviceAccount:
     type: string
     title: Syntasa Service Account
@@ -288,5 +152,5 @@ properties:
 required:
   - name
   - namespace
-  - project
-  - certificate
+  - haproxy.service.loadBalancerIP
+  - haproxy.service.loadBalancerSourceRanges
