@@ -4,16 +4,16 @@ metadata:
   name: {{ .Values.management.container_metadata.management_name }}
   namespace: {{ .Values.namespace }}
   labels:
-    run: {{ .Values.management.container_metadata.management_name }}
+    run: {{ .Values.management.service.name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: {{ .Values.management.container_metadata.management_name }}
+      run: {{ .Values.management.service.name }}
   template:
     metadata:
       labels:
-        run: {{ .Values.management.container_metadata.management_name }}
+        run: {{ .Values.management.service.name }}
     spec:
       serviceAccountName: {{ .Values.roles.serviceAccount }}
       automountServiceAccountToken: true
@@ -34,7 +34,11 @@ spec:
               containerPort: 10090
           env:
             - name: "SYNTASA_HOSTNAME"
-              value: "{{ .Values.management.ingress.tls.host }}"
+            {{- if .Values.haproxy.service.loadBalancerHostname }}
+              value: {{ .Values.haproxy.service.loadBalancerHostname }}
+            {{- else }}
+              value: {{ .Values.haproxy.service.loadBalancerIP }}
+            {{- end }}
             - name: "SYNTASA_NAMESPACE"
               value: "{{ .Values.namespace }}"
         - name: "{{ .Values.management.container_metadata.management_auth_name }}"
@@ -45,7 +49,11 @@ spec:
               containerPort: 10100
           env:
             - name: "SYNTASA_HOSTNAME"
-              value: "{{ .Values.management.ingress.tls.host }}"
+            {{- if .Values.haproxy.service.loadBalancerHostname }}
+              value: {{ .Values.haproxy.service.loadBalancerHostname }}
+            {{- else }}
+              value: {{ .Values.haproxy.service.loadBalancerIP }}
+            {{- end }}
             - name: "SYNTASA_NAMESPACE"
               value: "{{ .Values.namespace }}"
         - name: ubbagent
@@ -77,13 +85,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.management.container_metadata.management_name }}
+  name: {{ .Values.management.service.name }}
   namespace: {{ .Values.namespace }}
   labels:
-    run: {{ .Values.management.container_metadata.management_name }}
+    run: {{ .Values.management.service.name }}
 spec:
   selector:
-    run: {{ .Values.management.container_metadata.management_name }}
+    run: {{ .Values.management.service.name }}
   ports:
     - name: ui-port
       port: 10080
@@ -101,7 +109,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "haproxy"
   labels:
-    run: {{ .Values.management.container_metadata.management_name }}
+    run: {{ .Values.management.service.name }}
 spec:
   rules:
     - http:
@@ -110,29 +118,29 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.management.container_metadata.management_name }}
+                name: {{ .Values.management.service.name }}
                 port:
                   number: 10080
           - path: /syntasa-management
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.management.container_metadata.management_name }}
+                name: {{ .Values.management.service.name }}
                 port:
                   number: 10090
           - path: /syntasa-management/auth
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.management.container_metadata.management_name }}
+                name: {{ .Values.management.service.name }}
                 port:
                   number: 10100
-{{- if .Values.management.ingress.tls.host }}
-      host: {{ .Values.management.ingress.tls.host }}
+{{- if .Values.haproxy.service.loadBalancerHostname }}
+      host: {{ .Values.haproxy.service.loadBalancerHostname }}
 {{- end }}
   tls:
     - secretName: {{ .Values.management.ingress.tls.secretName }}
       hosts:
-      {{- if .Values.management.ingress.tls.host }}
-        - {{ .Values.management.ingress.tls.host }}
+      {{- if .Values.haproxy.service.loadBalancerHostname }}
+        - {{ .Values.haproxy.service.loadBalancerHostname }}
       {{- end }}

@@ -1,6 +1,7 @@
 name: "syntasa-application"
 namespace: default
 project: "syntasa-dev"
+clusterName: "cluster-1"
 gcpServiceAccount: ""
 reportingSecret: ""
 publishedVersion: "7.1.2"
@@ -14,10 +15,12 @@ syntasaManagementAuthImage: ""
 syntasaManagementConsoleImage: ""
 syntasaPackageImage: ""
 
-job:
-  name: syntasa-package
-  ttlSecondsAfterFinished: 300
-  activeDeadlineSeconds: 300
+agent:
+  name: syntasa-customer-intelligence-platform
+  ingress:
+    name: syntasa-customer-intelligence-platform
+    tls:
+      secretName: sma-certs
 
 imagePullSecrets:
   name: syn-creds
@@ -57,7 +60,8 @@ management:
     name: syntasa-management-console
     tls:
       secretName: sma-certs
-      host: ""
+  service:
+    name: syntasa-management-console
 
 roles:
   serviceAccount: "sma-sa"

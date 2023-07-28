@@ -61,29 +61,7 @@ Metrics-server is running at https://<your_cluster_ip>/api/v1/namespaces/kube-sy
 
 # SYNTASA Installation Prerequisites
 
-### External Metastore
-The SYNTASA platform makes use of an external metastore to store information about processed data and their table locations.
-This is currently required to be a postgres instance which can be in Cloud SQL or on a standalone Compute Instance.
-
-Minimum Requirements -
-
-1. db-n1-standard-1 - 1 vCPU and 4GB memory (minimum)
-2. db-n1-standard-2 - 2 vCPU and 8GB memory (recommended)
-
-Please see the following documentation on how to create a Cloud SQL Postgres Instance:
-
-> [Creating a Cloud SQL postgres Instance](https://cloud.google.com/sql/docs/postgres/create-instance)
-
-Once create please make note of the following information:
-
-1. Instance Connection Name
-    > <my_project>:<my_cluster_region>:<my_pg_instance_name>
-2. Instance username
-    > default user is 'postgres'
-3. Instance password 
-    > the password you set when creating the database 
-
-### External Static IP reservation (OPTIONAL)
+### External Static IP reservation
 If you wish to use your own static ip, please reserve one and note down the IP Address.
 
 If using GCLOUD, you may reserve a Static IP using the following documentation:
@@ -123,9 +101,8 @@ Please see the following for more information on how to create an IAM service ac
 Once the above steps have been completed you should have the following information:
 
 1. A Kubernetes Cluster created
-2. An External Metastore created
-3. External Static IP (optional)
-4. Google Cloud IAM Service Account
+2. External Static IP
+3. Google Cloud IAM Service Account
 
 
 For questions and comments please reach out to info@syntasa.com

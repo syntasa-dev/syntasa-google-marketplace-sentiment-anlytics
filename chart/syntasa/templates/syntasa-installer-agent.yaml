@@ -1,0 +1,88 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.agent.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    product: {{ .Values.agent.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.agent.name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.agent.name }}
+        product: {{ .Values.agent.name }}
+    spec:
+      serviceAccountName: {{ .Values.roles.serviceAccount }}
+      containers:
+        - image: {{ .Values.syntasaInstallerAgentImage }}
+          name: {{ .Values.agent.name }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 10110
+              name: agent-port
+          env:
+            - name: SYNTASA_HOSTNAME
+            {{- if .Values.haproxy.service.loadBalancerHostname }}
+              value: {{ .Values.haproxy.service.loadBalancerHostname }}
+            {{- else }}
+              value: {{ .Values.haproxy.service.loadBalancerIP }}
+            {{- end }}
+            - name: SYNTASA_AUTH_BASE_URL
+              value: http://syntasa-management-console.{{ .Values.namespace }}.svc.cluster.local:10100/syntasa-management/auth
+            - name: SYNTASA_PULL_POLICY
+              value: Always
+            - name: GCP_PROJECT_NAME
+              value: {{ .Values.project }}
+            - name: SYNTASA_CLUSTER_NAME
+              value: {{ .Values.clusterName }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.agent.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    product: {{ .Values.agent.name }}
+spec:
+  ports:
+    - port: 10110
+  selector:
+    app: {{ .Values.agent.name }}
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.agent.ingress.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    product: {{ .Values.agent.name }}
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/ingress.class: haproxy
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /syntasa-customer-intelligence-platform
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: syntasa-customer-intelligence-platform
+                port:
+                  number: 10110
+{{- if .Values.haproxy.service.loadBalancerHostname }}
+      host: {{ .Values.haproxy.service.loadBalancerHostname }}
+{{- end }}
+  tls:
+    - secretName: {{ .Values.agent.ingress.tls.secretName }}
+      hosts:
+      {{- if .Values.haproxy.service.loadBalancerHostname }}
+        - {{ .Values.haproxy.service.loadBalancerHostname }}
+      {{- end }}
