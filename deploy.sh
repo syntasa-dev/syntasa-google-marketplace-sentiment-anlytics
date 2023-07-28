@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
+#export REGISTRY=gcr.io/$(gcloud config get-value project | tr ':' '/')
 export REGISTRY=gcr.io/syntasa-public
-export DEPLOYER_TAG=5.0
+export DEPLOYER_TAG=7.1.2
 export TAG=latest
-export APP_NAME=syntasa
+export APP_NAME=syntasa-behaviorial-sentiment-analytics
 
 docker build \
 --build-arg REGISTRY=$REGISTRY \

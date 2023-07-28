@@ -48,14 +48,14 @@ kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/marketpla
 #
 
 ### Cloning the repo
-Clone the repo located here: https://github.com/syntasa-dev/syntasa-google-marketplace.git
+Clone the repo located here: https://github.com/syntasa-dev/syntasa-google-marketplace-sentiment-anlytics.git
 
 Place it somewhere on your machine e.g. ~/home/<my_user>/
 
 Once cloned or downloaded, please cd into the syntasa-google-marketplace directory
 
 ```
-cd ~/home/<my_user>/syntasa-google-marketplace
+cd ~/home/<my_user>/syntasa-google-marketplace-sentiment-anlytics
 ```
 
 Make the Deployer file executable
@@ -66,9 +66,9 @@ chmod +x deploy.sh
 Export the Registry env variables
 ```
 export REGISTRY=gcr.io/syntasa-public
-export DEPLOYER_TAG=5.0.2
+export DEPLOYER_TAG=7.1.2
 export TAG=latest
-export APP_NAME=syntasa
+export APP_NAME=syntasa-behaviorial-sentiment-analytics
 ```
 
 ### Gathering the required properties
@@ -76,16 +76,20 @@ When running the MPDEV installation, the following properties must be set
 
 ```
 {
-	"metastore_connection_name": "postgres_connection_name",
-	"metastore_connection_user": "postgres_user_name",
-	"metastore_connection_password": "postgre_password",
-	"static_ip_address": "external_static_ip",
-	"syn_secret_key": "syntasa_secret_key",
-	"infrastructure_service_account": "iam_service_account_email",
-	"syn_license": "my_license",
-	"namespace": "default",
-	"name": "syntasa-application",
-	"whitelist_ips": "ips_to_whitelist"
+    "name": "test-deployment",
+    "namespace": "syntasa",
+    "job.serviceAccountName": "sma-sa",
+    "imagePullSecrets.name": "syn-creds",
+    "imageRepo": "syntasadevelopment",
+    "installerVersion": "7.1.2",
+    "project": "syntasa-dev",
+    "pullFromDockerhub": true,
+    "haproxy.serviceAccountName": "sma-sa",
+    "haproxy.service.loadBalancerIP": "",
+    "haproxy.service.loadBalancerSourceRanges": "",
+    "secrets.certName": "sma-certs",
+    "management.ingress.tls.host": "",
+    "management.ingress.tls.secretName": "sma-certs"
 }
 ```
 
@@ -93,16 +97,21 @@ When running the MPDEV installation, the following properties must be set
 To run the Install type:
 ```
  mpdev install --deployer=$REGISTRY/$APP_NAME/deployer:$DEPLOYER_TAG --parameters='{
- "metastore_connection_name" : "MY_CLOUDSQL_CONNECTION_NAME",
- "metastore_connection_user" : "MY_CLOUDSQL_CONNECTION_USER",
- "metastore_connection_password" : "MY_CLOUDSQL_CONNECTION_PASSWORD",
- "static_ip_address" : "EXTERNAL_RESERVED_IP",
- "syn_secret_key" : "SECRET_KEY",
- "infrastructure_service_account" : "IAM_SERVICE_ACCOUNT_EMAIL",
- "syn_license": "LICENSE_KEY",
- "namespace": "YOUR_NAMESPACE",
- "name": "syntasa-application",
- "whitelist_ips": "WHITE_LISTED_IP_CIDRS"}'```
+    "name": "test-deployment",
+    "namespace": "syntasa",
+    "job.serviceAccountName": "sma-sa",
+    "imagePullSecrets.name": "syn-creds",
+    "imageRepo": "syntasadevelopment",
+    "installerVersion": "7.1.2",
+    "project": "syntasa-dev",
+    "pullFromDockerhub": true,
+    "haproxy.serviceAccountName": "sma-sa",
+    "haproxy.service.loadBalancerIP": "",
+    "haproxy.service.loadBalancerSourceRanges": "",
+    "secrets.certName": "sma-certs",
+    "management.ingress.tls.host": "",
+    "management.ingress.tls.secretName": "sma-certs"
+}'```
 
 
 ### Deploying your changes
