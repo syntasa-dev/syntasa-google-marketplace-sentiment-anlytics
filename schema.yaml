@@ -97,6 +97,7 @@ properties:
       type: STRING
   haproxy.service.loadBalancerIP:
     type: string
+    default: ""
     title: Static ip to use for your load balancer (this must be reserved beforehand, please see docs)
     x-google-marketplace:
       type: STRING
