@@ -153,5 +153,3 @@ properties:
 required:
   - name
   - namespace
-  - haproxy.service.loadBalancerIP
-  - haproxy.service.loadBalancerSourceRanges
