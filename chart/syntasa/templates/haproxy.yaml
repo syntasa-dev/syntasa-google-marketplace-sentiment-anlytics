@@ -52,7 +52,9 @@ spec:
     - port: {{ .Values.haproxy.service.port }}
       targetPort: {{ .Values.haproxy.service.targetPort }}
   type: {{ .Values.haproxy.service.type }}
+  {{- if .Values.haproxy.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.haproxy.service.loadBalancerIP }}
+  {{- end }}
   loadBalancerSourceRanges:
     {{ range splitList "," .Values.haproxy.service.loadBalancerSourceRanges }}
     - {{.}}
