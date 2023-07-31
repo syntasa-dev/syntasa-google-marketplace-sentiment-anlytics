@@ -21,7 +21,7 @@ data:
         encodedServiceAccountKey: $AGENT_ENCODED_KEY
 
     metrics:
-    - name: pid1_vcpuhours
+    - name: syntasa_byol_timebased_usage
       type: int
 
       endpoints:
@@ -53,7 +53,7 @@ data:
     sources:
     - name: instance_time_heartbeat
       heartbeat:
-        metric: pid1_vcpuhours
+        metric: syntasa_byol_timebased_usage
         intervalSeconds: 60
         value:
           int64Value: 60
