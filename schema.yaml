@@ -93,7 +93,7 @@ properties:
     type: string
     default: ""
     title: Hostname mapping to use for your load balancer
-    x-google-maretplace:
+    x-google-marketplace:
       type: STRING
   haproxy.service.loadBalancerIP:
     type: string
