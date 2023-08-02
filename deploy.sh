@@ -9,7 +9,7 @@ export APP_NAME=syntasa-behaviorial-sentiment-analytics
 rm -R $(pwd)/chart
 docker run -it --rm -v $(pwd)/chart:/chart --entrypoint /bin/sh alpine/helm:3.12.2 -c \
                 "helm repo add syntasa-dev https://syntasa-dev.github.io/syntasa-charts/ && \
-                helm pull syntasa-dev/syntasa --untar -d /chart"
+                helm pull syntasa-dev/syntasa --untar --version $DEPLOYER_TAG -d /chart"
 
 arch=$(uname -m)
 echo $arch
