@@ -25,29 +25,15 @@ data:
       type: int
 
       endpoints:
-      - name: on_disk
-      - name: servicecontrol
-
-      aggregation:
-        bufferSeconds: 60
-
-    - name: instance_time
-      type: int
-      endpoints:
-      - name: on_disk
       - name: servicecontrol
 
       passthrough: {}
 
     endpoints:
-    - name: on_disk
-      disk:
-        reportDir: /var/lib/ubbagent/reports
-        expireSeconds: 3600
     - name: servicecontrol
       servicecontrol:
         identity: gcp
-        serviceName: syntasa-behaviorial-sentiment-analytics.endpoints.syntasa-public.cloud.goog
+        serviceName: syntasa-behavioral-sentiment-analytics.endpoints.syntasa-public.cloud.goog
         consumerId: $AGENT_CONSUMER_ID
 
     sources:
