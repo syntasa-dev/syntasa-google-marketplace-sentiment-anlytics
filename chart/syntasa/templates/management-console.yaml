@@ -108,6 +108,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   annotations:
     kubernetes.io/ingress.class: "haproxy"
+    ingress.kubernetes.io/ssl-redirect: "true"
   labels:
     run: {{ .Values.management.service.name }}
 spec:

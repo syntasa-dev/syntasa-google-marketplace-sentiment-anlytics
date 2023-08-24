@@ -4,7 +4,7 @@ project: "syntasa-dev"
 clusterName: "cluster-1"
 gcpServiceAccount: ""
 reportingSecret: ""
-publishedVersion: "7.1.2"
+publishedVersion: "7.2.0"
 
 imageRepo: ""
 ubbAgentImage: "gcr.io/cloud-marketplace-tools/metering/ubbagent:latest"
@@ -13,7 +13,6 @@ syntasaInstallerAgentImage: ""
 syntasaManagementImage: ""
 syntasaManagementAuthImage: ""
 syntasaManagementConsoleImage: ""
-syntasaPackageImage: ""
 
 agent:
   name: syntasa-customer-intelligence-platform

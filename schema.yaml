@@ -1,15 +1,15 @@
 x-google-marketplace:
   schemaVersion: v2
   applicationApiVersion: v1beta1
-  publishedVersion: "7.1.2"
+  publishedVersion: "$TAG"
   publishedVersionMetadata:
     releaseNote: >-
-      SYNTASA platform release 7.1.2
+      SYNTASA platform release 7.2.0
     releaseTypes:
       - Feature
     recommended: true
   partnerId: syntasa-public
-  solutionId: syntasa
+  solutionId: syntasa-behavioral-sentiment-analytics.endpoints.syntasa-public.cloud.goog
   managedUpdates:
     kalmSupported: true
   clusterConstraints:
@@ -49,10 +49,6 @@ x-google-marketplace:
     syntasa-management-console:
       properties:
         syntasaManagementConsoleImage:
-          type: FULL
-    syntasa-package:
-      properties:
-        syntasaPackageImage:
           type: FULL
 
 form:
