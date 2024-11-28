@@ -4,7 +4,7 @@ project: "syntasa-dev"
 clusterName: "cluster-1"
 gcpServiceAccount: ""
 reportingSecret: ""
-publishedVersion: "7.2.0"
+publishedVersion: "8.1.0"
 
 imageRepo: ""
 ubbAgentImage: "gcr.io/cloud-marketplace-tools/metering/ubbagent:latest"
