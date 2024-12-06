@@ -132,7 +132,7 @@ properties:
                 resources: [ "*" ]
                 verbs: [ "*" ]
               - apiGroups: [ "rbac.authorization.k8s.io" ]
-                resources: [ "rolebindings", "roles" ]
+                resources: [ "rolebindings", "roles", "clusterrolebindings", "clusterroles" ]
                 verbs: [ "*" ]
               - apiGroups: [ "v1" ]
                 resources: [ "serviceaccounts" ]
