@@ -1,10 +1,10 @@
 x-google-marketplace:
   schemaVersion: v2
   applicationApiVersion: v1beta1
-  publishedVersion: "$TAG"
+  publishedVersion: '8.1.0'
   publishedVersionMetadata:
     releaseNote: >-
-      SYNTASA platform release 7.2.0
+      SYNTASA platform release 8.1.0
     releaseTypes:
       - Feature
     recommended: true
@@ -132,7 +132,7 @@ properties:
                 resources: [ "*" ]
                 verbs: [ "*" ]
               - apiGroups: [ "rbac.authorization.k8s.io" ]
-                resources: [ "rolebindings", "roles" ]
+                resources: [ "rolebindings", "roles", "clusterrolebindings", "clusterroles" ]
                 verbs: [ "*" ]
               - apiGroups: [ "v1" ]
                 resources: [ "serviceaccounts" ]

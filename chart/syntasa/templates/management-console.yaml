@@ -26,6 +26,13 @@ spec:
           ports:
             - name: "ui-port"
               containerPort: 10080
+          env:
+            - name: "POD_NAMESPACE"
+              value: "{{ .Values.namespace }}"
+            - name: "POD_NAME"
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
         - name: "{{ .Values.management.container_metadata.management_name }}"
           image: "{{ .Values.syntasaManagementImage }}"
           imagePullPolicy: "Always"
