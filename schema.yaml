@@ -1,10 +1,10 @@
 x-google-marketplace:
   schemaVersion: v2
   applicationApiVersion: v1beta1
-  publishedVersion: '8.1.0'
+  publishedVersion: '8.2.1'
   publishedVersionMetadata:
     releaseNote: >-
-      SYNTASA platform release 8.1.0
+      SYNTASA platform release 8.2.1
     releaseTypes:
       - Feature
     recommended: true
