@@ -1,10 +1,10 @@
 name: "syntasa-application"
 namespace: default
 project: "syntasa-dev"
-clusterName: "cluster-1"
+clusterName: "cluster-1" 
 gcpServiceAccount: ""
 reportingSecret: ""
-publishedVersion: "8.1.0"
+publishedVersion: "8.2.1"
 
 imageRepo: ""
 ubbAgentImage: "gcr.io/cloud-marketplace-tools/metering/ubbagent:latest"
