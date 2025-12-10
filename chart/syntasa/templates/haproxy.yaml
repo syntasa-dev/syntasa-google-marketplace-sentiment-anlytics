@@ -58,7 +58,6 @@ metadata:
 spec:
   selector:
     app.kubernetes.io/name: {{ .Values.haproxy.name }}
-    run: {{ .Values.haproxy.name }}
   ports:
     - port: {{ .Values.haproxy.service.port }}
       targetPort: {{ .Values.haproxy.service.targetPort }}
