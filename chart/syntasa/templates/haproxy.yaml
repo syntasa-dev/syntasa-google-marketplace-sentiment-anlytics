@@ -32,6 +32,7 @@ spec:
           args:
             - --configmap={{ .Values.namespace }}/syntasa-ingress-conf
             - --default-ssl-certificate={{ .Values.namespace }}/sma-certs
+            - -v=3
           ports:
             {{- range .Values.haproxy.ports }}
             - name: {{ .name }}
