@@ -4,16 +4,16 @@ metadata:
   name: {{ .Values.haproxy.name }}
   namespace: {{ .Values.namespace }}
   labels:
-    run: {{ .Values.haproxy.name }}
+    app.kubernetes.io/name: {{ .Values.haproxy.name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: {{ .Values.haproxy.name }}
+      app.kubernetes.io/name: {{ .Values.haproxy.name }}
   template:
     metadata:
       labels:
-        run: {{ .Values.haproxy.name }}
+        app.kubernetes.io/name: {{ .Values.haproxy.name }}
     spec:
       serviceAccountName: {{ .Values.roles.serviceAccount }}
       automountServiceAccountToken: true
@@ -44,10 +44,10 @@ metadata:
   name: {{ .Values.haproxy.service.name }}
   namespace: {{ .Values.namespace }}
   labels:
-    run: {{ .Values.haproxy.name }}
+    app.kubernetes.io/name: {{ .Values.haproxy.name }}
 spec:
   selector:
-    run: {{ .Values.haproxy.name }}
+    app.kubernetes.io/name: {{ .Values.haproxy.name }}
   ports:
     - port: {{ .Values.haproxy.service.port }}
       targetPort: {{ .Values.haproxy.service.targetPort }}
