@@ -5,6 +5,9 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ .Values.haproxy.name }}
+    app: {{ .Values.haproxy.name }}
+    run: {{ .Values.haproxy.name }}
+    name: {{ .Values.haproxy.name }}
 spec:
   replicas: 1
   selector:
