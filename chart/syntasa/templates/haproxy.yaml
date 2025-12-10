@@ -16,6 +16,7 @@ spec:
         app.kubernetes.io/name: {{ .Values.haproxy.name }}
         app: {{ .Values.haproxy.name }}
         run: {{ .Values.haproxy.name }}
+        name: {{ .Values.haproxy.name }}
     spec:
       serviceAccountName: {{ .Values.roles.serviceAccount }}
       automountServiceAccountToken: true
