@@ -17,10 +17,6 @@ spec:
     spec:
       serviceAccountName: {{ .Values.roles.serviceAccount }}
       automountServiceAccountToken: true
-      {{- if .Values.imagePullSecrets.name }}
-      imagePullSecrets:
-        - name: {{ .Values.imagePullSecrets.name }}
-      {{- end }}
       containers:
         - name: {{ .Values.haproxy.name }}
           image: "{{ .Values.haproxyIngressImage }}"

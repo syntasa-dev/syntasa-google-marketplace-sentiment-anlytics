@@ -21,9 +21,6 @@ agent:
     tls:
       secretName: sma-certs
 
-imagePullSecrets:
-  name: syn-creds
-
 haproxy:
   name: syntasa-ingress
   ports:
@@ -45,10 +42,6 @@ haproxy:
 secrets:
   cert:
     name: sma-certs
-  docker:
-    server: https://index.docker.io/v1/
-    username: your-docker-username
-    password: your-docker-password
 
 management:
   container_metadata:
