@@ -66,8 +66,8 @@ chmod +x deploy.sh
 Export the Registry env variables
 ```
 export REGISTRY=gcr.io/syntasa-public
-export DEPLOYER_TAG=8.1.0
-export TAG=8.1.0
+export DEPLOYER_TAG=8.2.2
+export TAG=8.2.2
 export APP_NAME=syntasa-behaviorial-sentiment-analytics
 ```
 
@@ -89,7 +89,7 @@ When running the MPDEV installation, the following properties must be set
 ### Running the MPDEV Installation
 To run the Install type:
 ```
-mpdev install --deployer=gcr.io/syntasa-public/syntasa-behaviorial-sentiment-analytics/deployer:8.1.0 --parameters='{
+mpdev install --deployer=gcr.io/syntasa-public/syntasa-behaviorial-sentiment-analytics/deployer:8.2.2 --parameters='{
     "name": "test-deployment",
     "namespace": "syntasa",
     "reportingSecret": "gs://cloud-marketplace-tools/reporting_secrets/fake_reporting_secret.yaml",
