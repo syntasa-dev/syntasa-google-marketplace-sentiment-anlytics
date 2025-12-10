@@ -5,9 +5,6 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ .Values.haproxy.name }}
-    app: {{ .Values.haproxy.name }}
-    run: {{ .Values.haproxy.name }}
-    name: {{ .Values.haproxy.name }}
 spec:
   replicas: 1
   selector:
@@ -17,14 +14,13 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: {{ .Values.haproxy.name }}
-        app: {{ .Values.haproxy.name }}
-        run: {{ .Values.haproxy.name }}
-        name: {{ .Values.haproxy.name }}
     spec:
       serviceAccountName: {{ .Values.roles.serviceAccount }}
       automountServiceAccountToken: true
+      {{- if .Values.imagePullSecrets.name }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets.name }}
+      {{- end }}
       containers:
         - name: {{ .Values.haproxy.name }}
           image: "{{ .Values.haproxyIngressImage }}"
@@ -32,7 +28,6 @@ spec:
           args:
             - --configmap={{ .Values.namespace }}/syntasa-ingress-conf
             - --default-ssl-certificate={{ .Values.namespace }}/sma-certs
-            - -v=3
           ports:
             {{- range .Values.haproxy.ports }}
             - name: {{ .name }}
@@ -40,13 +35,10 @@ spec:
             {{- end }}
           env:
             - name: POD_NAME
-              value: {{ .Values.haproxy.name }}
+              value: "{{ .Values.haproxy.name }}"
             - name: POD_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
+              value: "{{ .Values.namespace }}"
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -54,7 +46,6 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ .Values.haproxy.name }}
-    run: {{ .Values.haproxy.name }}
 spec:
   selector:
     app.kubernetes.io/name: {{ .Values.haproxy.name }}
@@ -65,7 +56,9 @@ spec:
   {{- if .Values.haproxy.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.haproxy.service.loadBalancerIP }}
   {{- end }}
+  {{- if .Values.haproxy.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-    {{ range splitList "," .Values.haproxy.service.loadBalancerSourceRanges }}
-    - {{.}}
-  {{ end }}
+  {{- range $cidr := splitList "," .Values.haproxy.service.loadBalancerSourceRanges }}
+    - {{ $cidr | quote }}
+  {{- end }}
+  {{- end }}
