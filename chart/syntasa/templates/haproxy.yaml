@@ -41,7 +41,9 @@ spec:
             - name: POD_NAME
               value: {{ .Values.haproxy.name }}
             - name: POD_NAMESPACE
-              value: {{ .Values.namespace }}
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
 ---
 
 apiVersion: v1
