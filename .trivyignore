@@ -1,0 +1,56 @@
+# Residual CVEs in the Google-supplied deployer_helm base image.
+#
+# These live in binaries Google builds and ships -- /usr/local/bin/helm and
+# /opt/kubectl/v1.36/kubectl. Nothing in this repository installs, compiles or
+# vendors them, so they cannot be remediated here. See the design spec, 2.6/2.7.
+#
+# REVIEW THIS FILE AT EVERY BASE BUMP. Delete any entry the new base has fixed.
+# A stale ignore is indistinguishable from a missing gate.
+#
+# Verified against the built 8.4.0 candidate on 2026-09-09: exactly these 14
+# CVEs / 24 findings remain.
+#
+#
+# SCOPE LIMIT -- READ BEFORE TRUSTING A PASSING GATE.
+#
+# This gate runs at --severity HIGH,CRITICAL. It is NOT a measure of the image's
+# total findings: the same image scans at 170 findings across all severities,
+# and Artifact Registry reports 172. Most of the remainder is MEDIUM/LOW in
+# Ubuntu base packages we do not control. Never quote the gate's count as the
+# image's vulnerability count -- that comparison is what produced an incorrect
+# "256 -> 24" claim in an early draft of the 8.4 submission note.
+#
+# The gate is also not a substitute for Google's scan. Verified 2026-09-09 with
+# a same-day vulnerability DB: Artifact Registry reported CVE-2026-56865 and
+# CVE-2026-56864 (Go stdlib, HIGH) against a digest where this scanner reported
+# neither, and rates CVE-2026-39821 CRITICAL/9.6 where this scanner says
+# HIGH/8.2. Different feeds, different severities. A passing gate means "no new
+# HIGH/CRITICAL that we know of and have not excused" -- nothing stronger.
+#
+# Upstream fixes Google would need to build against:
+#   Go stdlib 1.26.6, x/net 0.56.0, x/crypto 0.55.0, x/text 0.39.0,
+#   oras-go 2.6.2
+
+# --- golang.org/x/crypto v0.54.0 -> 0.55.0 (helm) ---
+CVE-2026-56854  # CRITICAL: x/crypto/ssh auth bypass, unenforced source-address restrictions
+
+# --- golang.org/x/net v0.49.0 (kubectl) ---
+CVE-2026-25681  # x/net/html: XSS -> arbitrary code execution
+CVE-2026-27136  # x/net/html: XSS via HTML parsing bypass
+CVE-2026-33814  # x/net http2: DoS via malformed SETTINGS_MAX_FRAME_SIZE
+CVE-2026-39821  # x/net/idna: privilege escalation via Punycode label processing
+CVE-2026-46600  # x/net/dns/dnsmessage: DoS via invalid DNS record parsing
+
+# --- golang.org/x/text v0.33.0 -> 0.39.0 (kubectl) ---
+CVE-2026-56852  # x/text: DoS via invalid UTF-8 input
+
+# --- oras.land/oras-go/v2 v2.6.1 -> 2.6.2 (helm) ---
+CVE-2026-50163  # oras-go: info disclosure via crafted tarball hardlinks
+
+# --- Go stdlib 1.26.5 -> 1.26.6 (helm and kubectl) ---
+CVE-2026-33818  # encoding/asn1: DoS via excessive recursion in Unmarshal
+CVE-2026-56853  # net/http: DoS on unencrypted HTTP/2 connections
+CVE-2026-56858  # html/template: XSS via pathological input
+CVE-2026-56859  # encoding/xml: DoS via XML decoding recursion depth
+CVE-2026-56860  # net/url: DoS from quadratic complexity in path handling
+CVE-2026-56862  # crypto/tls: DoS via indefinite KeyUpdate messages

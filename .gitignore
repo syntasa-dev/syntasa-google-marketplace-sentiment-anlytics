@@ -1,2 +1,8 @@
 .DS_Store
 .idea
+# Internal release working notes -- specs, plans, scan evidence, runbooks.
+# THIS REPOSITORY IS PUBLIC. Vulnerability scan output for shipped images and
+# internal infrastructure identifiers must not be committed here. Keep them in
+# an internal location instead.
+docs/superpowers/
+docs/MARKETPLACE_RUNBOOK.md
