@@ -1,12 +1,12 @@
 x-google-marketplace:
   schemaVersion: v2
   applicationApiVersion: v1beta1
-  publishedVersion: '8.2.2'
+  publishedVersion: '8.4.0'
   publishedVersionMetadata:
     releaseNote: >-
-      SYNTASA platform release 8.2.2
+      SYNTASA platform release 8.4.0
     releaseTypes:
-      - Feature
+      - Security
     recommended: true
   partnerId: syntasa-public
   solutionId: syntasa-behavioral-sentiment-analytics.endpoints.syntasa-public.cloud.goog
@@ -58,11 +58,11 @@ form:
 
       <p>For more information about the SYNTASA Google Marketplace Configuration Parameters on the left, please visit the following guide:</p>
 
-      <a href="https://github.com/syntasa-dev/syntasa-google-marketplace/blob/master/docs/MARKETPLACE_CONFIG_OPTIONS.md#syntasa-google-cloud-marketplace-configuration-options">Syntasa Marketplace Installation and Configuration Documentation</a>
+      <a href="https://github.com/syntasa-dev/syntasa-google-marketplace-sentiment-anlytics/blob/master/docs/MARKETPLACE_CONFIG_OPTIONS.md#syntasa-google-cloud-marketplace-configuration-options">Syntasa Marketplace Installation and Configuration Documentation</a>
 
       <p>For more information about the SYNTASA solution please visiting the following github repo:</p>
 
-      <a href="https://github.com/syntasa-dev/syntasa-google-marketplace#syntasa-customer-intelligence-platform-for-google-marketplace">Syntasa Marketplace Installation and Configuration Documentation</a></p>
+      <a href="https://github.com/syntasa-dev/syntasa-google-marketplace-sentiment-anlytics#syntasa-customer-intelligence-platform-for-google-marketplace">Syntasa Marketplace Installation and Configuration Documentation</a></p>
 
       <p>For any additional support please visit: <a href="https://help.syntasa.com">help.syntasa.com</a></p>
 

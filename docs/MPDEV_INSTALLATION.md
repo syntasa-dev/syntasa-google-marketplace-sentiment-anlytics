@@ -52,7 +52,7 @@ Clone the repo located here: https://github.com/syntasa-dev/syntasa-google-marke
 
 Place it somewhere on your machine e.g. ~/home/<my_user>/
 
-Once cloned or downloaded, please cd into the syntasa-google-marketplace directory
+Once cloned or downloaded, please cd into the syntasa-google-marketplace-sentiment-anlytics directory
 
 ```
 cd ~/home/<my_user>/syntasa-google-marketplace-sentiment-anlytics
@@ -66,8 +66,8 @@ chmod +x deploy.sh
 Export the Registry env variables
 ```
 export REGISTRY=gcr.io/syntasa-public
-export DEPLOYER_TAG=8.2.2
-export TAG=8.2.2
+export DEPLOYER_TAG=8.4.0
+export TAG=8.4.0
 export APP_NAME=syntasa-behaviorial-sentiment-analytics
 ```
 
@@ -89,7 +89,7 @@ When running the MPDEV installation, the following properties must be set
 ### Running the MPDEV Installation
 To run the Install type:
 ```
-mpdev install --deployer=gcr.io/syntasa-public/syntasa-behaviorial-sentiment-analytics/deployer:8.2.2 --parameters='{
+mpdev install --deployer=gcr.io/syntasa-public/syntasa-behaviorial-sentiment-analytics/deployer:8.4.0 --parameters='{
     "name": "test-deployment",
     "namespace": "syntasa",
     "reportingSecret": "gs://cloud-marketplace-tools/reporting_secrets/fake_reporting_secret.yaml",

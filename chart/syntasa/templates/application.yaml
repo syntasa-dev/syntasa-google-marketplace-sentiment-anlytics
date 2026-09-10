@@ -11,7 +11,7 @@ metadata:
 spec:
   descriptor:
     type: Syntasa
-    version: '8.2.2'
+    version: '8.4.0'
     maintainers:
       - name: SYNTASA
         url: https://www.syntasa.com
@@ -44,11 +44,11 @@ spec:
       page and head towards the IP pointed to by the 'syntasa-ingress' service.  For more information please visit the
       following document on how to retrieve your SYNTASA application UI:
 
-      https://github.com/syntasa-dev/syntasa-google-marketplace#accessing-the-syntasa-application-ui
+      https://github.com/syntasa-dev/syntasa-google-marketplace-sentiment-anlytics#accessing-the-syntasa-application-ui
 
       # Terms of Service
       Please refer to the SYNTASA licensing agreement located here:
-      https://github.com/syntasa-dev/syntasa-google-marketplace/blob/master/LICENSE.md
+      https://github.com/syntasa-dev/syntasa-google-marketplace-sentiment-anlytics/blob/master/LICENSE.md
 
       # Support
       For support please reach out to support@syntasa.com
@@ -58,13 +58,11 @@ spec:
       - description: SYNTASA Website
         url: "https://www.syntasa.com"
       - description: SYNTASA Prerequisites
-        url: "https://github.com/syntasa-dev/syntasa-google-marketplace/blob/master/docs/PREREQUISITES.md"
+        url: "https://github.com/syntasa-dev/syntasa-google-marketplace-sentiment-anlytics/blob/master/docs/PREREQUISITES.md"
       - description: SYNTASA Marketplace Documentation
-        url: "https://github.com/syntasa-dev/syntasa-google-marketplace"
-      - description: SYNTASA HELM On-Prem Deployment
-        url: "https://github.com/syntasa-dev/syntasa-google-marketplace/blob/master/docs/HELM_INSTALLATION.md"
+        url: "https://github.com/syntasa-dev/syntasa-google-marketplace-sentiment-anlytics"
       - description: SYNTASA Licensing Agreement
-        url: "https://github.com/syntasa-dev/syntasa-google-marketplace/blob/master/LICENSE.md"
+        url: "https://github.com/syntasa-dev/syntasa-google-marketplace-sentiment-anlytics/blob/master/LICENSE.md"
   selector:
     matchLabels:
       app.kubernetes.io/name: "{{ .Release.Name }}"
