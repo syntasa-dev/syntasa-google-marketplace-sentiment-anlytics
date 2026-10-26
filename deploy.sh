@@ -11,7 +11,7 @@
 set -euo pipefail
 
 # ---- release configuration --------------------------------------------------
-VERSION="${VERSION:-8.4.0}"        # full release version
+VERSION="${VERSION:-8.4.1}"        # full release version
 TRACK="${TRACK:-${VERSION%.*}}"    # 8.4.0 -> 8.4
 
 export PROJECT="$(gcloud config get-value project | tr ':' '/')"
