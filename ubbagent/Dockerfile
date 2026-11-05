@@ -13,7 +13,7 @@
 #
 # Bump this tag when Google publishes a newer agent:
 #   gcloud container images list-tags gcr.io/cloud-marketplace-tools/metering/ubbagent
-FROM gcr.io/cloud-marketplace-tools/metering/ubbagent:0.2.13
+FROM gcr.io/cloud-marketplace-tools/metering/ubbagent:0.2.18
 
 # Patch the Alpine OpenSSL packages.
 #
@@ -30,4 +30,10 @@ FROM gcr.io/cloud-marketplace-tools/metering/ubbagent:0.2.13
 # Deliberately no `USER root`: if the base runs as root this works unchanged, and
 # if it does not, the build fails loudly rather than silently escalating the
 # container's privileges.
+#
+# 2026-11-05: upstream 0.2.18 now carries the OpenSSL fix, so this line is a
+# no-op today (0.2.18 scans at zero HIGH/CRITICAL). KEPT anyway: it costs one
+# cached layer and auto-patches OS packages in the window between an Alpine
+# advisory and Google's next ubbagent release -- exactly the gap that blocked
+# the 8.4 submission. Revisit only if it starts causing drift.
 RUN apk upgrade --no-cache libcrypto3 libssl3
